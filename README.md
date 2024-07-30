@@ -1,4 +1,4 @@
-<p> <img src="assets/page-speed-logo.png"> </p>
+<p align="center">  <img width="300" src="assets/page-speed-logo.png"> </p>
 <h1 align="center"> <b> PageSpeed API </b></h1>
 
 ## Overview
