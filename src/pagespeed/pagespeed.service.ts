@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import axios from 'axios';
 import * as fs from 'fs-extra';
 import * as path from 'path';
@@ -8,9 +13,14 @@ import * as puppeteer from 'puppeteer';
 export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(PageSpeedService.name);
   private url: string;
-  private interval: number = 60000;  // Default to 60000 milliseconds (1 minute)
+  private interval = 60000;
   private intervalId: NodeJS.Timeout;
-  private readonly outputDir = path.join(__dirname, '..', '..', 'pagespeed_data');
+  private readonly outputDir = path.join(
+    __dirname,
+    '..',
+    '..',
+    'pagespeed_data',
+  );
 
   constructor() {
     this.createOutputDirectory();
@@ -42,7 +52,9 @@ export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
 
   private startInterval() {
     this.intervalId = setInterval(() => this.handleCron(), this.interval);
-    this.logger.log(`Interval started with interval: ${this.interval} milliseconds`);
+    this.logger.log(
+      `Interval started with interval: ${this.interval} milliseconds`,
+    );
   }
 
   private clearInterval() {
@@ -75,14 +87,17 @@ export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
       const fileName = `pagespeed_data_${timestamp.replace(/[:.]/g, '-')}.pdf`;
       const filePath = path.join(this.outputDir, fileName);
 
-      await this.generatePDF({
-        timestamp,
-        performance,
-        accessibility,
-        bestPractices,
-        seo,
-        audits,
-      }, filePath);
+      await this.generatePDF(
+        {
+          timestamp,
+          performance,
+          accessibility,
+          bestPractices,
+          seo,
+          audits,
+        },
+        filePath,
+      );
 
       this.logger.log(`PageSpeed data written to ${filePath}`);
       console.log('PageSpeed data written to', filePath);
@@ -145,7 +160,9 @@ export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
             data: {
               labels: ['Performance'],
               datasets: [{
-                data: [${data.performance * 100}, 100 - ${data.performance * 100}],
+                data: [${data.performance * 100}, 100 - ${
+      data.performance * 100
+    }],
                 backgroundColor: ['#FF6384', '#CCCCCC'],
               }],
             },
@@ -157,7 +174,9 @@ export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
             data: {
               labels: ['Accessibility'],
               datasets: [{
-                data: [${data.accessibility * 100}, 100 - ${data.accessibility * 100}],
+                data: [${data.accessibility * 100}, 100 - ${
+      data.accessibility * 100
+    }],
                 backgroundColor: ['#36A2EB', '#CCCCCC'],
               }],
             },
@@ -169,7 +188,9 @@ export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
             data: {
               labels: ['Best Practices'],
               datasets: [{
-                data: [${data.bestPractices * 100}, 100 - ${data.bestPractices * 100}],
+                data: [${data.bestPractices * 100}, 100 - ${
+      data.bestPractices * 100
+    }],
                 backgroundColor: ['#FFCE56', '#CCCCCC'],
               }],
             },
@@ -198,17 +219,25 @@ export class PageSpeedService implements OnModuleInit, OnModuleDestroy {
   }
 
   private generateAuditTable(audits: any): string {
-    let auditTable = '<table><tr><th>Title</th><th>Description</th><th>Score</th><th>Details</th></tr>';
+    let auditTable =
+      '<table><tr><th>Title</th><th>Description</th><th>Score</th><th>Details</th></tr>';
 
-    Object.keys(audits).forEach(key => {
+    Object.keys(audits).forEach((key) => {
       const audit = audits[key];
-      const score = audit.scoreDisplayMode === 'numeric' ? (audit.score * 100).toFixed(2) : 'N/A';
+      const score =
+        audit.scoreDisplayMode === 'numeric'
+          ? (audit.score * 100).toFixed(2)
+          : 'N/A';
       auditTable += `
         <tr>
           <td>${audit.title}</td>
           <td>${audit.description}</td>
           <td>${score}</td>
-          <td>${audit.details ? JSON.stringify(audit.details) : 'No details available'}</td>
+          <td>${
+            audit.details
+              ? JSON.stringify(audit.details)
+              : 'No details available'
+          }</td>
         </tr>
       `;
     });
