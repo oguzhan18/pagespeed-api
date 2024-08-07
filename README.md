@@ -19,7 +19,7 @@ charts and audit details.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/pagespeed-api.git
+   git clone https://github.com/oguzhan18/pagespeed-api.git
     ```
 2. Install the dependencies:
 
